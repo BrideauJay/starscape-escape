@@ -106,38 +106,11 @@ void display() {
 	glFlush();  // Render now
 }
 
-void kbd(unsigned char key, int x, int y)
+void kbd(unsigned char key, int x, int y) //CHECK MORE OFTEN 
+//only checks when key registers as pressed, overrides 'old' keypress data even if current
 {
-	cout << "a: " << GetAsyncKeyState('A') << endl;
-	cout << "d: " << GetAsyncKeyState('D') << endl;
-	//move left
-	if (key == 'A' || key == 'a') {
-		if (active_player->getX() > 0) {
-			active_player->setXMove(-1);
-		}
-		else if (lvl1.getCurrentScreenNum() != 0) {
-			lvl1.screen_left();
-			active_player->setX(120 - active_player->getCharWidth());
-		}
-		else {
-			active_player->setXMove(0);
-		}
-	}
-	//move right
-	if (key == 'D' || key == 'd') {
-		if ((active_player->getX() + active_player->getCharWidth()) < 120 ){
-			active_player->setXMove(1);
-		}
-		else if (lvl1.getCurrentScreenNum() < lvl1.screens.size()-1){
-			lvl1.screen_right();
-			active_player->setX(0);
-		}
-		else {
-			active_player->setXMove(0);
-		}
-	}
 	//jump
-	if (key == ' ') {
+	if (key == 32) {
 		active_player->jump();
 	}
 	//look at user
@@ -148,6 +121,7 @@ void kbd(unsigned char key, int x, int y)
 	if (key == 'W' || key == 'w') {
 		active_player->setDirection(away);
 	}
+
 	//switch players (REPLACE WITH MENU)
 	if (key == 'Q' || key == 'q') {
 		if (active_player == &allison) {
@@ -167,6 +141,7 @@ void kbd(unsigned char key, int x, int y)
 		}
 	}
 
+
 	glutPostRedisplay();
 
 	return;
@@ -174,14 +149,42 @@ void kbd(unsigned char key, int x, int y)
 
 void timer(int extra) {
 
+	//LEFT AND RIGHT MOVEMENT
+
+	//register A press/left movement
+	if (GetAsyncKeyState(0x41) != 0) {
+		if (active_player->getX() > 0) {
+			active_player->setXMove(-1);
+		}
+		else if (lvl1.getCurrentScreenNum() != 0) {
+			lvl1.screen_left();
+			active_player->setX(120 - active_player->getCharWidth());
+			active_player->setXMove(-1);
+		}
+		else {
+			active_player->setXMove(0);
+		}
+	}
+	//register d press/right movement
+	else if (GetAsyncKeyState(0x44) != 0) {
+		if ((active_player->getX() + active_player->getCharWidth()) < 120) {
+			active_player->setXMove(1);
+		}
+		else if (lvl1.getCurrentScreenNum() < lvl1.screens.size() - 1) {
+			lvl1.screen_right();
+			active_player->setX(0);
+			active_player->setXMove(1);
+		}
+		else {
+			active_player->setXMove(0);
+		}
+	} else {
+		active_player->setXMove(0);
+	}
+
 	allison.gravity(lvl1.getCurrentScreen().platforms);
 	bee.gravity(lvl1.getCurrentScreen().platforms);
 	caleb.gravity(lvl1.getCurrentScreen().platforms);
-
-	//if player not actively moving left or right AND on solid ground, stop side-to-side movement
-	if (GetAsyncKeyState('A') == 0 && GetAsyncKeyState('D') && active_player->solid == true) {
-		active_player->setXMove(0);
-	} 
 
 	glutTimerFunc(60, timer, 0);
 	glutPostRedisplay();
