@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include "Platform.h"
+#include "Screen.h"
 
 using namespace std;
 
@@ -42,6 +43,9 @@ public:
 
 	//is there solid ground under the player
 	bool solid;
+
+	//what screen is the character on?
+	Screen charCurrentScreen;
 
 protected:
 	//x and y coords are for top left corner of box containing whole character

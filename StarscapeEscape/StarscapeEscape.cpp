@@ -34,37 +34,14 @@ void init() {
 	height = lvl1.height;
 	pixel_width = lvl1.pixel_width;
 
-	screen01 = Screen(width, height, pixel_width);
-	screen01.addPixelCluster(20, 25, 10, 15, 1, 0, 0);
-
-	screen02 = Screen(width, height, pixel_width);
-	screen02.addPixelCluster(50, 70, 20, 40, 0, 1, 0);
-
-	screen03 = Screen(width, height, pixel_width);
-	screen03.addPixelCluster(5, 25, 40, 45, 0, 0, 1);
-
-	p = Platform(15, width, 20, pixel_width);
-	p2 = Platform(0, 15, 35, pixel_width);
-	p3 = Platform(17, 5, 40, pixel_width);
-	screen01.addPlatform(p);
-	screen01.addPlatform(p2);
-	screen01.addPlatform(p3);
-
-	Platform p4 = Platform(0, width, 20, pixel_width);
-	screen02.addPlatform(p4);
-
-	Platform p5 = Platform(0, 20, 20, pixel_width);
-	screen03.addPlatform(p5);
-
-	Platform p6 = Platform(25, 30, 30, pixel_width);
-	screen03.addPlatform(p6);
-
-	lvl1.addScreen(screen01);
-	lvl1.addScreen(screen02);
-	lvl1.addScreen(screen03);
 	allison = Allison(15, 5, pixel_width);
 	bee = Bee(25, 5, pixel_width);
 	caleb = Caleb(35, 5, pixel_width);
+
+	allison.charCurrentScreen = lvl1.getCurrentScreen();
+	bee.charCurrentScreen = lvl1.getCurrentScreen();
+	caleb.charCurrentScreen = lvl1.getCurrentScreen();
+
 	active_player = &allison;
 	follower1 = &bee;
 	follower2 = &caleb;
@@ -94,10 +71,18 @@ void display() {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	lvl1.getCurrentScreen().draw();
+	//this should be what i want but it glitches out horribly
+	//active_player->charCurrentScreen.draw();
 
-	allison.draw();
-	bee.draw();
-	caleb.draw();
+	if (follower2->charCurrentScreen.screenid == lvl1.getCurrentScreen().screenid) {
+		follower2->draw();
+	}
+	if (follower1->charCurrentScreen.screenid == lvl1.getCurrentScreen().screenid) {
+		follower1->draw();
+	}	
+	if (active_player->charCurrentScreen.screenid == lvl1.getCurrentScreen().screenid) {
+		active_player->draw();
+	}
 
 	allison.handleXMove();
 	bee.handleXMove();
@@ -139,6 +124,7 @@ void kbd(unsigned char key, int x, int y) //CHECK MORE OFTEN
 			follower1 = &bee;
 			follower2 = &caleb;
 		}
+		current_screen = active_player->charCurrentScreen;
 	}
 
 
@@ -160,6 +146,7 @@ void timer(int extra) {
 			lvl1.screen_left();
 			active_player->setX(120 - active_player->getCharWidth());
 			active_player->setXMove(-1);
+			active_player->charCurrentScreen = lvl1.getCurrentScreen();
 		}
 		else {
 			active_player->setXMove(0);
@@ -174,6 +161,7 @@ void timer(int extra) {
 			lvl1.screen_right();
 			active_player->setX(0);
 			active_player->setXMove(1);
+			active_player->charCurrentScreen = lvl1.getCurrentScreen();
 		}
 		else {
 			active_player->setXMove(0);
@@ -182,9 +170,15 @@ void timer(int extra) {
 		active_player->setXMove(0);
 	}
 
-	allison.gravity(lvl1.getCurrentScreen().platforms);
-	bee.gravity(lvl1.getCurrentScreen().platforms);
-	caleb.gravity(lvl1.getCurrentScreen().platforms);
+	if (allison.charCurrentScreen.screenid == lvl1.getCurrentScreen().screenid) {
+		allison.gravity(lvl1.getCurrentScreen().platforms);
+	}
+	if (bee.charCurrentScreen.screenid == lvl1.getCurrentScreen().screenid) {
+		bee.gravity(lvl1.getCurrentScreen().platforms);
+	}
+	if (caleb.charCurrentScreen.screenid == lvl1.getCurrentScreen().screenid) {
+		caleb.gravity(lvl1.getCurrentScreen().platforms);
+	}
 
 	glutTimerFunc(60, timer, 0);
 	glutPostRedisplay();

@@ -51,6 +51,7 @@ void Screen::draw() {
 	}
 }
 
+
 vector <Platform> Screen::get_platforms() {
 	return platforms;
 }

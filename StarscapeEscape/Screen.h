@@ -4,6 +4,7 @@
 #include "Platform.h"
 #include <vector>
 #include "graphics.hpp"
+#include <string>
 
 using namespace std;
 
@@ -36,6 +37,10 @@ public:
 	vector <Platform> get_platforms();
 
 	void draw();
+
+	//unique identifier
+	string screenid;
+
 };
 
 #endif

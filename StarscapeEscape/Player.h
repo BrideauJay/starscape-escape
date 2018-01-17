@@ -6,8 +6,6 @@
 
 class Player : public Character {
 public:
-	//virtual void moveLeft();
-	//virtual void moveRight();
 	virtual void handleXMove();
 
 	virtual void setXMove(int i);
@@ -23,8 +21,6 @@ public:
 	int xCurrentSpeed = 0;
 	int yCurrentSpeed = 1;
 	int gravitySpeed;
-
-	Screen thisCurrentScreen;
 
 protected:
 	int pixel_width;

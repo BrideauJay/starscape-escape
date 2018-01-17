@@ -25,6 +25,8 @@ Level::Level(int indicator) {
 		screen01.addPlatform(p2);
 		screen01.addPlatform(p3);
 
+		screen01.screenid = "lvl1scr1";
+
 		addScreen(screen01);
 
 		Screen screen02 = Screen(width, height, pixel_width);
@@ -32,6 +34,8 @@ Level::Level(int indicator) {
 
 		Platform p4 = Platform(0, width, 20, pixel_width);
 		screen02.addPlatform(p4);
+
+		screen02.screenid = "lvl1scr2";
 
 		addScreen(screen02);
 
@@ -43,6 +47,8 @@ Level::Level(int indicator) {
 
 		Platform p6 = Platform(25, 30, 30, pixel_width);
 		screen03.addPlatform(p6);
+
+		screen03.screenid = "lvl1scr3";
 
 		addScreen(screen03);
 
