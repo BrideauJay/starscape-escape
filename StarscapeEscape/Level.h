@@ -25,6 +25,9 @@ public:
 	int getCurrentScreenNum();
 	Screen getCurrentScreen();
 
+	//forcibly set the current screen, for toggling between players on different screens
+	void setCurrentScreen(Screen new_current_screen);
+
 	bool screen_left();
 	bool screen_right();
 };

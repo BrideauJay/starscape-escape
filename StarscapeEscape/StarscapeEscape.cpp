@@ -15,12 +15,8 @@ using namespace std;
 
 int width, height, pixel_width;
 Level lvl1;
-Screen screen01;
-Screen screen02;
-Screen screen03;
 Screen current_screen;
 int wd;
-Platform p, p2, p3;
 Player* active_player;
 Player* follower1;
 Player* follower2;
@@ -30,8 +26,8 @@ Caleb caleb;
 
 void init() {
 	lvl1 = Level(1);
-	width = lvl1.width;
-	height = lvl1.height;
+	width = 960;
+	height = 640;
 	pixel_width = lvl1.pixel_width;
 
 	allison = Allison(15, 5, pixel_width);
@@ -71,8 +67,6 @@ void display() {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	lvl1.getCurrentScreen().draw();
-	//this should be what i want but it glitches out horribly
-	//active_player->charCurrentScreen.draw();
 
 	if (follower2->charCurrentScreen.screenid == lvl1.getCurrentScreen().screenid) {
 		follower2->draw();
@@ -124,9 +118,10 @@ void kbd(unsigned char key, int x, int y) //CHECK MORE OFTEN
 			follower1 = &bee;
 			follower2 = &caleb;
 		}
+		//get the screen the active player is on, and display it
 		current_screen = active_player->charCurrentScreen;
+		lvl1.setCurrentScreen(current_screen);
 	}
-
 
 	glutPostRedisplay();
 
